@@ -28,14 +28,10 @@
 #             K = np.array(img_array)
 #             # 存储npy文件
 #             np.save(image_name, K)
- 
 
 
 import datetime
 timestamp = datetime.datetime.now()
 formatted_timestamp = str(timestamp).replace(":", "").replace("-", "").replace(".", "_")
 print(formatted_timestamp)
-
-
-
 
