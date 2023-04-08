@@ -125,14 +125,16 @@ def Calc_absImg(tmpWI, tmpWO, tmpBG, AbsPowerRatioStatus, MotionRPStatus=1, Butt
     return img
 
     # save image
-
-def calculateAtom(TotalPhotons, ROIsize, NCountStatus = 0):
     # if not MotionRPStatus:
     #     first_pos = [ButtonLastPos[0] - round(ROIlength / 2), ButtonLastPos[1] - round(ROIlength / 2)]
     #     second_pos = first_pos[0] + ROIlength
     #
     # ROIImg = img[first_pos[0]:second_pos[0], first_pos[1]:second_pos[1]]
     # TotalPhotons = round(tmpfactor * np.sum(np.sum(ROIImg)))
+def calculateAtom(TotalPhotons, ROIsize, NCountStatus = 0):
+    print('TotalPhotons',TotalPhotons)
+    #输入参数有 ROI 区域的总数据叠加和 ROI 尺寸大小 
+    #返回值为吸收成像 ROI 区域的总原子数和平均每像素点的原子数
     MotPower = float(settings.widget_params["Analyse Data Setting"]["ToPwr"])
     MOTBeamOD = float(settings.widget_params["Analyse Data Setting"]["Dia"])
     MOTDetuning = float(settings.widget_params["Analyse Data Setting"]["Detu"])
@@ -185,6 +187,10 @@ def calculateAtom(TotalPhotons, ROIsize, NCountStatus = 0):
         AtomROIPX = round(AtomROITot/ROIsize)
         # ElectronROI = TotalPhotons
         # AtomROITotFit = ABSCountsFitting
+
+        #modi
+        print('AtomROITot is ',AtomROITot)
+        print('AtomROIPX is ',AtomROIPX)
 
     return [AtomROITot, AtomROIPX]
 

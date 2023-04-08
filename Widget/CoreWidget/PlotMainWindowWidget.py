@@ -10,6 +10,7 @@ from Model.DataAnalysis.CaculateAtoms import *
 from PyQt5.QtGui import QFont
 from copy import deepcopy
 from matplotlib import cm
+# import matplotlib.pyplot as plt
 import numpy as np
 # getcontext().prec = 4#Set significant number
 
@@ -388,9 +389,16 @@ class PlotMainWindow(QWidget):
         try:
             if self.roi.pos()[0] < 0 or self.roi.pos()[1] < 0 or self.roi.size()[1] > self.data_shape[1] or self.roi.size()[0] > self.data_shape[0]:
                 return
+            
+            print('before TotalPhotons is ',(sum(self.data[int(self.roi.pos()[1]):int(self.roi.pos()[1] + self.roi.size()[0]), 
+                                             int(self.roi.pos()[0]):int(self.roi.pos()[0] + self.roi.size()[1])])))
 
-            TotalPhotons = sum(sum(self.data[int(self.roi.pos()[1]):int(self.roi.pos()[1] + self.roi.size()[0]), int(self.roi.pos()[0]):int(self.roi.pos()[0] + self.roi.size()[1])]))
+            TotalPhotons = sum(sum(self.data[int(self.roi.pos()[1]):int(self.roi.pos()[1] + self.roi.size()[0]), 
+                                             int(self.roi.pos()[0]):int(self.roi.pos()[0] + self.roi.size()[1])]))
+            #modi
+            print('TotalPhotons is ',TotalPhotons)
             ROIsize = self.roi.size()[0]*self.roi.size()[1]
+            print('ROIsize is ',ROIsize)
 
             #以吸收成像的参数计算原子数
             calculatedata = calculateAtom(TotalPhotons, ROIsize, 1)
@@ -480,6 +488,9 @@ class PlotMainWindow(QWidget):
         self.img.setImage(img_dict['img_data'])
         # print(img_dict['img_data'][794,420:450])
         self.data = img_dict['img_data']
+        print('self.data_shape is',self.data_shape)
+        # print('self.data is',self.data)
+
 
         import cv2
         # gray_image = cv2.cvtColor(img_dict['img_data'], cv2.COLOR_BGR2GRAY)
@@ -489,6 +500,9 @@ class PlotMainWindow(QWidget):
 
         # cnt = contours[0]
         m = cv2.moments(img_dict['img_data'])
+        #modi
+        # plt.imshow(m)
+        # plt.show()
         # print(m)
         x = int(m['m10'] / m['m00'])
         y = int(m['m01'] / m['m00'])

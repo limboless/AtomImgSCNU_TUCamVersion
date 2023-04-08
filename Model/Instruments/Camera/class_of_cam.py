@@ -9,7 +9,8 @@ import numpy as np
 os.chdir('AtomImgSCNU\\Model\\Instruments\\Camera\\TUCamdll\\')
 # os.chdir('AtomImgSCNU')
 TUSDKdll = ctypes.OleDLL("TUCam.dll")
-#os.chdir('D:\\vscode\\becAtomImg SCNU20220425\\')   #要改
+#os.chdir('D:\\vscode\\becAtomImg SCNU20220425\\')   #要改 
+# #测试修改为 检测当前目录的上级目录，输入该目录绝对路径，以修改存图目录
 
 
 #  class typedef enum TUCAM status:
@@ -404,11 +405,13 @@ class TUCAM_REG_RW(Structure):
 
 # 利用三幅图像计算吸收成像最后的结果
 def Calc_absImg(tmpWI, tmpWO, tmpBG):
-   withoutAtom = tmpWO - tmpBG
-   withoutAtom[withoutAtom == 0] = 1 #分母为零将导致计算无意义，先改为 1，后将这些点的数值改为 1，取对数后为 0
-   img = (tmpWI - tmpBG) / (tmpWO - tmpBG)
-   img[withoutAtom == 0] = 1
-   img[img <= 0] = 1
-   img[img >= 1] = 1
-   img = -np.log(img)
-   return img
+    withoutAtom = tmpWO - tmpBG
+    withoutAtomTest = copy.deepcopy(withoutAtom)  #用于判断何处数值为0
+    withoutAtom[withoutAtomTest == 0] = 1 #分母为零将导致计算无意义，先改为 1，后将这些点的数值改为 1，取对数后为 0
+    img = (tmpWI - tmpBG) / (withoutAtom)
+    # use more efficient way to restrict image value
+    img[withoutAtomTest == 0] = 1
+    img[img <= 0] = 1
+    img[img >= 1] = 1
+    img = -np.log(img)
+    return img
